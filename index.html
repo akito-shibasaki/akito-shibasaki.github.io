@@ -64,15 +64,16 @@
       pointer-events: none;
       overflow: hidden;
     }
-
+    
     .blob {
       position: absolute;
       border-radius: 50%;
       filter: blur(60px);
-      opacity: 0.45;
+      opacity: 0.48;
       will-change: transform;
     }
-
+    
+    /* ここが重要：CSSだけで常にふわふわ動く */
     .blob-1 {
       width: 420px;
       height: 420px;
@@ -80,12 +81,13 @@
       top: 80px;
       background: radial-gradient(
         circle,
-        rgba(49, 92, 253, 0.32),
+        rgba(49, 92, 253, 0.34),
         rgba(49, 92, 253, 0.06) 70%,
         transparent 100%
       );
+      animation: floatBlob1 12s ease-in-out infinite alternate;
     }
-
+    
     .blob-2 {
       width: 360px;
       height: 360px;
@@ -93,12 +95,13 @@
       top: 240px;
       background: radial-gradient(
         circle,
-        rgba(92, 225, 230, 0.30),
+        rgba(92, 225, 230, 0.32),
         rgba(92, 225, 230, 0.07) 70%,
         transparent 100%
       );
+      animation: floatBlob2 15s ease-in-out infinite alternate;
     }
-
+    
     .blob-3 {
       width: 400px;
       height: 400px;
@@ -106,10 +109,38 @@
       bottom: -120px;
       background: radial-gradient(
         circle,
-        rgba(180, 140, 255, 0.26),
+        rgba(180, 140, 255, 0.30),
         rgba(180, 140, 255, 0.05) 70%,
         transparent 100%
       );
+      animation: floatBlob3 18s ease-in-out infinite alternate;
+    }
+    
+    @keyframes floatBlob1 {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(80px, 50px, 0) scale(1.12);
+      }
+    }
+    
+    @keyframes floatBlob2 {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(-90px, -40px, 0) scale(1.08);
+      }
+    }
+    
+    @keyframes floatBlob3 {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      100% {
+        transform: translate3d(60px, -70px, 0) scale(1.14);
+      }
     }
 
     .grid-overlay {
@@ -800,45 +831,5 @@
     </div>
   </footer>
 
-  <script>
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!prefersReducedMotion) {
-      const blobs = [
-        document.querySelector(".blob-1"),
-        document.querySelector(".blob-2"),
-        document.querySelector(".blob-3")
-      ];
-
-      let scrollYPos = window.scrollY;
-
-      window.addEventListener("scroll", () => {
-        scrollYPos = window.scrollY;
-      });
-
-      function animate() {
-        const t = performance.now() * 0.001;
-
-        if (blobs[0]) {
-          blobs[0].style.transform =
-            `translate3d(${Math.sin(t * 0.7) * 60}px, ${Math.cos(t * 0.9) * 42 + scrollYPos * 0.12}px, 0)`;
-        }
-
-        if (blobs[1]) {
-          blobs[1].style.transform =
-            `translate3d(${Math.cos(t * 0.6) * 64}px, ${Math.sin(t * 0.8) * 46 - scrollYPos * 0.10}px, 0)`;
-        }
-
-        if (blobs[2]) {
-          blobs[2].style.transform =
-            `translate3d(${Math.sin(t * 0.5) * 50}px, ${Math.cos(t * 0.7) * 54 + scrollYPos * 0.06}px, 0)`;
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      animate();
-    }
-  </script>
 </body>
 </html>
